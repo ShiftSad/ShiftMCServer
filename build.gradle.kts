@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.21"
     id("net.kyori.blossom") version "1.2.0" // Text replacement
+    id("com.github.johnrengelman.shadow") version "7.1.2" // Shadowing
 }
 
 group = "org.example"

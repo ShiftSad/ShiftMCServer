@@ -1,4 +1,4 @@
-package teh.shiftmc.server
+package tech.shiftmc.server
 
 object VERSION {
 
