@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.21"
+    id("net.kyori.blossom") version "1.2.0" // Text replacement
 }
 
 group = "org.example"
@@ -23,10 +24,22 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
+blossom {
+    val gitCommit = getOutputOf("git rev-parse --short HEAD").trim()
+    val gitBranch = getOutputOf("git rev-parse --abbrev-ref HEAD").trim()
+    val gitCommitDate = getOutputOf("git show -s --format=%ci").trim()
+
+    replaceToken("%%GIT_COMMIT%%", gitCommit)
+    replaceToken("%%GIT_BRANCH%%", gitBranch)
+    replaceToken("%%GIT_COMMIT_DATE%%", gitCommitDate)
+}
+
+fun getOutputOf(command: String): String {
+    val process = Runtime.getRuntime().exec(command)
+    process.waitFor()
+    return process.inputStream.bufferedReader().readText()
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "17"
 }
