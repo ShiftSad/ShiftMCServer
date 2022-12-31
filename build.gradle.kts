@@ -1,6 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    `maven-publish`
+
     kotlin("jvm") version "1.7.21"
     id("net.kyori.blossom") version "1.2.0" // Text replacement
     id("com.github.johnrengelman.shadow") version "7.1.2" // Shadowing
@@ -15,7 +17,7 @@ repositories {
 }
 
 dependencies {
-    // Minestom (Main dependency)
+    // Minestom
     implementation("com.github.Minestom:Minestom:91a344aa92")
 
     // Tiny Log
@@ -43,4 +45,16 @@ fun getOutputOf(command: String): String {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "17"
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = project.properties["group"] as? String?
+            artifactId = project.name
+            version = project.properties["version"] as? String?
+
+            from(components["java"])
+        }
+    }
 }
